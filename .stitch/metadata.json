@@ -1,0 +1,17 @@
+{
+  "name": "projects/476974836319538652",
+  "projectId": "476974836319538652",
+  "title": "TerraSense",
+  "visibility": "PRIVATE",
+  "projectType": "PROJECT_DESIGN",
+  "origin": "STITCH",
+  "deviceType": "DESKTOP",
+  "designTheme": {
+    "colorMode": "DARK",
+    "font": "INTER",
+    "roundness": "ROUND_EIGHT",
+    "customColor": "#58E3A5",
+    "saturation": 3
+  },
+  "screens": {}
+}

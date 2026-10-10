@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: TerraSense Critical Risk Notification System (AWS SNS)
+
+Parameters:
+  TeamEmailAddress:
+    Type: String
+    Description: Email address to receive critical risk alerts
+    Default: "alerts@terrasense-demo.local"
+
+Resources:
+  CriticalRiskTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: terrasense-critical-risk-alerts
+      DisplayName: TerraSense Alerts
+
+  EmailSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref CriticalRiskTopic
+      Endpoint: !Ref TeamEmailAddress
+      Protocol: email
+
+Outputs:
+  TopicArn:
+    Description: ARN of the SNS Topic
+    Value: !Ref CriticalRiskTopic
