@@ -57,3 +57,8 @@ override.tf.json
 # AWS
 .aws/
 credentials.csv
+
+# Local SQLite databases
+*.db
+*.sqlite
+*.sqlite3

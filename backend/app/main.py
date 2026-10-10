@@ -14,8 +14,22 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configure CORS for local frontend dev and production
-frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:5173")
-allow_origins = ["http://localhost:5173", "http://127.0.0.1:5173", frontend_url]
+allowed_origins_env = os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
+legacy_frontend_url = os.environ.get("FRONTEND_URL", "")
+
+raw_origins = allowed_origins_env.split(",")
+if legacy_frontend_url:
+    raw_origins.append(legacy_frontend_url)
+
+allow_origins = []
+for origin in raw_origins:
+    origin = origin.strip()
+    if origin:
+        # Strip trailing slash to ensure Exact Match in FastAPI CORSMiddleware works
+        if origin.endswith("/"):
+            origin = origin[:-1]
+        allow_origins.append(origin)
+
 # Remove duplicates
 allow_origins = list(set(allow_origins))
 
