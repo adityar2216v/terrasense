@@ -1,6 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Search, Globe, Activity, AlertTriangle, BarChart3, FileText, Bot, Settings, Bell, User, ChevronLeft, Menu, Database, ChevronDown, ShieldAlert } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import logoIcon from '../../assets/logo-icon.png';
 
 export function Layout() {
   const location = useLocation();
@@ -8,7 +9,7 @@ export function Layout() {
   
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [backendStatus, setBackendStatus] = useState<'connected' | 'error' | 'checking'>('checking');
-  const [dataMode, setDataMode] = useState<'LIVE' | 'DEMO' | 'PARTIAL'>('LIVE');
+  const [dataMode] = useState<'LIVE' | 'DEMO' | 'PARTIAL'>('LIVE');
 
   useEffect(() => {
     // In a real app, this would ping the health endpoint
@@ -28,9 +29,11 @@ export function Layout() {
     { label: 'Terra AI', path: '/app/assistant', icon: Bot }, // Using Bot for now, maybe Sparkles if available
   ];
 
+  const userRole = localStorage.getItem('userRole');
+
   const systemItems = [
-    { label: 'Admin Dashboard', path: '/app/admin', icon: ShieldAlert },
-    { label: 'Org Workspace', path: '/app/org', icon: User },
+    ...(userRole === 'admin' ? [{ label: 'Admin Dashboard', path: '/app/admin', icon: ShieldAlert }] : []),
+    ...(userRole === 'org' ? [{ label: 'Org Workspace', path: '/app/org', icon: User }] : []),
     { label: 'Settings', path: '/app/settings', icon: Settings },
   ];
 
@@ -74,12 +77,7 @@ export function Layout() {
       >
         <div className="h-14 flex items-center justify-between px-4 border-b border-brand-surface bg-[#131E2F]">
           <div className="flex items-center gap-2 overflow-hidden">
-            <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
-              <path d="M16 2C8.268 2 2 8.268 2 16C2 23.732 8.268 30 16 30C23.732 30 30 23.732 30 16C30 8.268 23.732 2 16 2ZM16 28C9.373 28 4 22.627 4 16C4 9.373 9.373 4 16 4C22.627 4 28 9.373 28 16C28 22.627 22.627 28 16 28Z" fill="var(--color-brand-primary)" fillOpacity="0.2"/>
-              <path d="M22.5 10.5C22.5 10.5 19 8 15 8C11 8 8 11 8 15C8 19 10.5 22.5 10.5 22.5" stroke="var(--color-brand-primary)" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M10.5 22.5C10.5 22.5 14 24 18 24C22 24 24 21 24 17C24 13 22.5 10.5 22.5 10.5" stroke="var(--color-brand-teal)" strokeWidth="2" strokeLinecap="round"/>
-              <circle cx="16" cy="16" r="4" fill="var(--color-brand-primary)" />
-            </svg>
+            <img src={logoIcon} alt="TerraSense Logo" className="w-8 h-8 shrink-0 object-contain" />
             {!isSidebarCollapsed && (
               <span className="font-display font-bold text-[15px] tracking-tight text-white whitespace-nowrap">
                 TerraSense
@@ -147,7 +145,10 @@ export function Layout() {
               <span className="absolute top-1 right-1 w-2 h-2 bg-brand-primary rounded-full border border-[#131E2F]"></span>
             </button>
             
-            <button className="flex items-center gap-2 hover:bg-brand-surface p-1 rounded transition-colors ml-1">
+            <button onClick={() => {
+              localStorage.removeItem('userRole');
+              window.location.href = '/';
+            }} className="flex items-center gap-2 hover:bg-brand-surface p-1 rounded transition-colors ml-1" title="Logout">
               <div className="w-6 h-6 rounded bg-brand-surface border border-white/10 flex items-center justify-center text-brand-text-main">
                 <User size={14} />
               </div>

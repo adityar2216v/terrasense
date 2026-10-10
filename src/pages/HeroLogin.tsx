@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Leaf, Wind, Droplets, Shield, ArrowRight, Activity, Globe, ShieldAlert } from 'lucide-react';
+import { Wind, Shield, ArrowRight, Activity, Globe, ShieldAlert } from 'lucide-react';
+
+import logoFull from '../assets/logo-full.png';
 
 export const HeroLogin = () => {
   const navigate = useNavigate();
@@ -16,10 +18,13 @@ export const HeroLogin = () => {
     setTimeout(() => {
       const userEmail = email.toLowerCase();
       if (userEmail.includes('admin') || userEmail.includes('root')) {
+        localStorage.setItem('userRole', 'admin');
         navigate('/app/admin');
       } else if (userEmail.includes('org') || userEmail.includes('water') || userEmail.includes('agency')) {
+        localStorage.setItem('userRole', 'org');
         navigate('/app/org');
       } else {
+        localStorage.setItem('userRole', 'user');
         navigate('/app');
       }
     }, 800);
@@ -33,11 +38,8 @@ export const HeroLogin = () => {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary rounded-full mix-blend-screen filter blur-[128px] opacity-20 animate-pulse"></div>
 
         <div className="relative z-10 max-w-2xl">
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-12 h-12 bg-brand-primary/10 rounded-xl flex items-center justify-center border border-brand-primary/30">
-              <Activity className="w-6 h-6 text-brand-primary" />
-            </div>
-            <h1 className="text-2xl font-display font-bold tracking-widest text-white uppercase">TerraSense</h1>
+          <div className="mb-10">
+            <img src={logoFull} alt="TerraSense Logo" className="h-20 object-contain drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]" />
           </div>
           
           <h2 className="text-5xl lg:text-7xl font-display font-black mb-6 leading-[1.1] tracking-tight">

@@ -13,6 +13,7 @@ import { EmergencySOS } from './pages/EmergencySOS';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { OrgDashboard } from './pages/OrgDashboard';
 import { Navigate } from 'react-router-dom';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -33,16 +34,27 @@ function App() {
         <Route path="/settings" element={<Navigate to="/app/settings" replace />} />
         
         <Route path="/app" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="agents" element={<Agents />} />
-          <Route path="map" element={<LiveMap />} />
-          <Route path="incidents" element={<Incidents />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="assistant" element={<TerraAI />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="admin" element={<AdminDashboard />} />
-          <Route path="org" element={<OrgDashboard />} />
+          {/* General app routes accessible to all authenticated users */}
+          <Route element={<ProtectedRoute />}>
+            <Route index element={<Dashboard />} />
+            <Route path="agents" element={<Agents />} />
+            <Route path="map" element={<LiveMap />} />
+            <Route path="incidents" element={<Incidents />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="reports" element={<Reports />} />
+            <Route path="assistant" element={<TerraAI />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+          
+          {/* Admin only route */}
+          <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+            <Route path="admin" element={<AdminDashboard />} />
+          </Route>
+          
+          {/* Org only route */}
+          <Route element={<ProtectedRoute allowedRoles={['org']} />}>
+            <Route path="org" element={<OrgDashboard />} />
+          </Route>
         </Route>
       </Routes>
     </Router>
